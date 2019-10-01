@@ -2,13 +2,12 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
-import time
 
 def context_crawl_push(URL, Count_array, like, boo):
     
     resp = requests.get(url=URL, cookies={'over18': '1'})
     resp.encoding = 'utf-8'
-    assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+    # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
     soup = BeautifulSoup(resp.text, 'html.parser')
 
     tag = soup.html.find_all('span', {'class', 'push-tag'})
@@ -50,7 +49,7 @@ def context_crawl_push(URL, Count_array, like, boo):
 def context_crawl_popular(URL, Array, count):
     resp = requests.get(url=URL, cookies={'over18': '1'})
     resp.encoding = 'utf-8'
-    assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+    # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
     soup = BeautifulSoup(resp.text, 'html.parser')
 
     count += 1
@@ -70,7 +69,7 @@ def keyword_element(URL, Array, keyword):
 
     resp = requests.get(url=URL, cookies={'over18': '1'})
     resp.encoding = 'utf-8'
-    assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+    # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
     soup = BeautifulSoup(resp.text, 'html.parser')
     
     text = soup.get_text().split("--\n※ 發信站")[0].split("返回看板")[1]
@@ -97,7 +96,7 @@ def crawl():
     PTT_Beauty_URL = 'https://www.ptt.cc/bbs/Beauty/index2324.html'
     resp = requests.get(url=PTT_Beauty_URL, cookies={'over18': '1'})
     resp.encoding = 'utf-8'
-    assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+    # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
     soup = BeautifulSoup(resp.text, 'html.parser')
     div_section = soup.html.find_all('div', {'class', 'r-ent'})
 
@@ -133,7 +132,7 @@ def crawl():
         PTT_Beauty_URL = 'https://www.ptt.cc/bbs/Beauty/index{}.html'.format(page)
         resp = requests.get(url=PTT_Beauty_URL, cookies={'over18': '1'})
         resp.encoding = 'utf-8'
-        assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+        # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
         soup = BeautifulSoup(resp.text, 'html.parser')
         div_section = soup.html.find_all('div', {'class', 'r-ent'})
 
@@ -155,7 +154,6 @@ def crawl():
 
                 # popular part
                 if div_section[i].find('span', {'class': 'hl'}) != None:
-                    # print(div_section[i].find('span', {'class': 'hl'}).text)
                     if div_section[i].find('span', {'class': 'hl'}).text == '爆':
                         print(string, file=all_popular)
                 
@@ -164,7 +162,7 @@ def crawl():
     PTT_Beauty_URL = 'https://www.ptt.cc/bbs/Beauty/index2758.html'
     resp = requests.get(url=PTT_Beauty_URL, cookies={'over18': '1'})
     resp.encoding = 'utf-8'
-    assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
+    # assert str(resp.status_code)[0] == "2", "status_code Error" + str(resp.status_code)
     soup = BeautifulSoup(resp.text, 'html.parser')
     div_section = soup.html.find_all('div', {'class', 'r-ent'})
 
@@ -189,7 +187,6 @@ def crawl():
             
             # popular part
             if div_section[i].find('span', {'class': 'hl'}) != None:
-                # print(div_section[i].find('span', {'class': 'hl'}).text)
                 if div_section[i].find('span', {'class': 'hl'}).text == '爆':
                     print(string, file=all_popular)
 
@@ -215,21 +212,17 @@ def push(start_date, end_date):
     # 用 while 逐行讀取檔案內容，直至檔案結尾
     while line:
         line = line.encode('utf-8').decode('utf-8-sig')
-        # start_time = time.time()
         if line[3] == ',':
             number = int(line[0:3])
         else:
             number = int(line[0:4])
 
         if number >= start_date and number <= end_date:
-            # count += 1
-            # href = 0
             for i in range(0, len(line)):
                 if line[len(line)-i-1] == ',':
                     Count_array, all_like, all_boo = context_crawl_push(line[len(line)-i:len(line)-1], Count_array, all_like, all_boo)
                     break
 
-            # print(number)
         line = fp.readline()
 
 
@@ -263,7 +256,6 @@ def popular(start_date, end_date):
     ## 用 while 逐行讀取檔案內容，直至檔案結尾
     while line:
         line = line.encode('utf-8').decode('utf-8-sig')
-        # start_time = time.time()
         if line[3] == ',':
             number = int(line[0:3])
         else:
@@ -323,8 +315,6 @@ def keyword(keyword, start_date, end_date):
     
 
 if __name__ == '__main__':
-    # start_time = time.time()
-
     if len(sys.argv) > 1:
         if sys.argv[1] == 'crawl':
             crawl()
@@ -347,5 +337,3 @@ if __name__ == '__main__':
             print("argv[1] error")
     else:
         print("Please input argv")
-    
-    # print("--- %s seconds ---" % (time.time() - start_time))
