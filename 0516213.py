@@ -4,10 +4,6 @@ import requests
 from bs4 import BeautifulSoup
 import time
 
-
-# PTT_Beauty_URL = 'https://www.ptt.cc/bbs/Beauty/index.html'
-
-
 def context_crawl_push(URL, Count_array, like, boo):
     
     resp = requests.get(url=URL, cookies={'over18': '1'})
@@ -89,23 +85,6 @@ def keyword_element(URL, Array, keyword):
                     break
 
     return Array
-
-### Create new dict ###
-def dict_create():
-    small_letter = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'] 
-    big_letter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-    number_letter = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-    
-    Dict = {}
-
-    for i in range(len(small_letter)):
-        Dict[small_letter[i]] = []
-    for i in range(len(big_letter)):
-        Dict[big_letter[i]] = []
-    for i in range(len(number_letter)):
-        Dict[number_letter[i]] = []
-
-    return Dict
 
 # 2324 2758
 def crawl():
@@ -233,10 +212,7 @@ def push(start_date, end_date):
     all_like = 0
     all_boo = 0
     
-    # Dict = dict_create()
-
-    # count = 0
-    ## 用 while 逐行讀取檔案內容，直至檔案結尾
+    # 用 while 逐行讀取檔案內容，直至檔案結尾
     while line:
         line = line.encode('utf-8').decode('utf-8-sig')
         # start_time = time.time()
@@ -257,15 +233,6 @@ def push(start_date, end_date):
         line = fp.readline()
 
 
-    # print(Count_array)
-
-    # Count_array.sort(key=lambda x: (-x[1], x[0]))
-    # print(Count_array[0:10])
-
-    # Count_array.sort(key=lambda x: (-x[2], x[0]))
-    # print(Count_array[0:10])
-
-    # print(all_like, all_boo)
         
     fp.close()
 
@@ -282,6 +249,8 @@ def push(start_date, end_date):
     Count_array.sort(key=lambda x: (-x[2], x[0]))
     for i in range(0, 10):
         print("boo #" + str(i) + ": " + Count_array[i][0] + " " + str(Count_array[i][2]), file=push_txt)
+
+    push_txt.close()
 
     
 def popular(start_date, end_date):
@@ -309,15 +278,15 @@ def popular(start_date, end_date):
 
         line = fp.readline()
     
-    # print(Array)
-    popular_txt = open("popular[{}-{}].txt".format(start_date, end_date), "w", encoding="utf-8")    
+    fp.close()
 
+    popular_txt = open("popular[{}-{}].txt".format(start_date, end_date), "w", encoding="utf-8")    
 
     print("number of popular articles: {}".format(count), file=popular_txt)
     for i in range(0, len(Array)):
         print(Array[i], file=popular_txt)
 
-    fp.close()
+    popular_txt.close()
 
 def keyword(keyword, start_date, end_date):
 
@@ -344,9 +313,13 @@ def keyword(keyword, start_date, end_date):
 
         line = fp.readline()
 
+    fp.close()
+
     keyword_txt = open("keyword({})[{}-{}].txt".format(keyword, start_date, end_date), "w", encoding="utf-8")
     for i in range(0, len(Array)):
         print(Array[i], file=keyword_txt)
+
+    keyword_txt.close()
     
 
 if __name__ == '__main__':
