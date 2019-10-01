@@ -350,7 +350,7 @@ def keyword(keyword, start_date, end_date):
     
 
 if __name__ == '__main__':
-    start_time = time.time()
+    # start_time = time.time()
 
     if len(sys.argv) > 1:
         if sys.argv[1] == 'crawl':
@@ -375,4 +375,4 @@ if __name__ == '__main__':
     else:
         print("Please input argv")
     
-    print("--- %s seconds ---" % (time.time() - start_time))
+    # print("--- %s seconds ---" % (time.time() - start_time))
